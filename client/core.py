@@ -1,11 +1,11 @@
-from db_plugins.db import SQLDatabase
-from object_query import SQLObjectQuery
+import requests
 
 
 class ALeRCE:
-    def __init__(self):
-        self.config = {}  ## define default config
-        self.sql_db = SQLDatabase()
+    def __init__(self, **kwargs):
+        ztf_url = kwargs.get("ztf_url", "3.212.59.238:8082")
+        self.config = {"ZTF_API_URL": ztf_url}  ## define default config
+        self.session = requests.Session()
 
     def load_config_from_object(self, config):
         self.config.update(config)
@@ -18,8 +18,20 @@ class ALeRCE:
         ## parse file
         return {}
 
-    def init_client(self):
-        self.sql_db.connect(config=self.config["DATABASE"]["SQL"])
+    @property
+    def ztf_url(self):
+        return self.config["ZTF_API_URL"]
 
     def query_objects(self, args):
-        return SQLObjectQuery(self.sql_db).query_objects(args)
+        return self.session.get("%s/objects" % self.ztf_url, params=args)
+
+    def query_lightcurve(self, oid):
+        return self.session.get("%s/objects/%s/lightcurve" % (self.ztf_url, oid))
+
+    def query_detections(self, oid):
+        return self.session.get("%s/objects/%s/detections" % (self.ztf_url, oid))
+    
+    def query_non_detections(self, oid):
+        return self.session.get("%s/objects/%s/non_detections" % (self.ztf_url, oid))
+
+
