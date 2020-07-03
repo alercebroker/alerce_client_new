@@ -1,6 +1,6 @@
 import sys
 sys.path.append("..")
-from client.core import ALeRCE
+from alerce.core import AlerceAPI
 import pytest
 
 
@@ -9,5 +9,5 @@ import pytest
 ## 
 @pytest.fixture
 def alerce():
-    alerce = ALeRCE()
+    alerce = AlerceAPI()
     return alerce
