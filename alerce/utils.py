@@ -1,4 +1,5 @@
-import pandas as pd
+from pandas import DataFrame
+from astropy.table import Table
 
 
 class Result:
@@ -8,12 +9,12 @@ class Result:
 
     def to_pandas(self):
         if isinstance(self.json_result, list):
-            return pd.DataFrame(self.json_result)
+            return DataFrame(self.json_result)
         else:
-            return pd.DataFrame([self.json_result])
+            return DataFrame([self.json_result])
 
     def to_votable(self):
-        pass
+        return Table(self.json_result)
 
     def to_json(self):
         return self.json_result
