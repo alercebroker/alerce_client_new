@@ -68,3 +68,7 @@ intersphinx_mapping = {
     "astropy":("http://docs.astropy.org/en/stable/",None),
     'python': ('https://docs.python.org/3', None),
 }
+
+master_doc = 'index'
+
+source_suffix = '.rst'
