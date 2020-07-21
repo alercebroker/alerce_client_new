@@ -23,19 +23,7 @@ class AlerceSearch(Client):
         }
         default_config.update(kwargs)
         super().__init__(**default_config)
-        self.allowed_formats = ["pandas", "votable", "json"]
-
-    def _request(
-        self, method, url, params=None, response_field=None, result_format="json"
-    ):
-        result_format = self.__validate_format(result_format)
-        resp = self.session.request(method, url, params=params)
-
-        if resp.status_code >= 400:
-            handle_error(resp)
-        if response_field and result_format != "json":
-            return Result(resp.json()[response_field], format=result_format)
-        return Result(resp.json(), format=result_format)
+        
 
     @property
     def ztf_url(self):
@@ -43,14 +31,6 @@ class AlerceSearch(Client):
 
     def __get_url(self, resource, *args):
         return self.ztf_url + self.config["ZTF_ROUTES"][resource] % args
-
-    def __validate_format(self, format):
-        format = format.lower()
-        if not format in self.allowed_formats:
-            raise FormatValidationError(
-                "Format '%s' not in %s" % (format, self.allowed_formats), code=500
-            )
-        return format
 
     def query_objects(self, format="pandas", **kwargs):
         """
@@ -61,7 +41,7 @@ class AlerceSearch(Client):
         ----------
         format : str
             Return format. Can be one of 'pandas' | 'votable' | 'json'
-        
+
         **kwargs
             Keyword arguments. Each argument can be one of the `ALERCE ZTF API`_
             object query parameters.
@@ -94,7 +74,7 @@ class AlerceSearch(Client):
             - order_by : str
                 Column used for ordering. Available values : oid, ndethist, ncovhist, mjdstarthist, mjdendhist, corrected, stellar, ndet, g_r_max, g_r_max_corr, g_r_mean, g_r_mean_corr, meanra, meandec, sigmara, sigmadec, deltamjd, firstmjd, lastmjd, step_id_corr, object, classifier_name, class_name, probability, probabilities
             - order_mode : str
-                Ordering could be ascendent or descendent. 
+                Ordering could be ascendent or descendent.
                 Available values : ASC, DESC
         """
 

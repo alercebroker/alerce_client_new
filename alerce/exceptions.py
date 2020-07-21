@@ -1,19 +1,23 @@
 def handle_error(response):
-    codes = {-1: ZTFAPIError, 400: ParseError, 404: ObjectNotFoundError}
-    error = response.json().get("errors", {})
-    message = response.json().get("message")
+    codes = {-1: APIError, 400: ParseError, 404: ObjectNotFoundError}
+    try:
+        error = response.json().get("errors", {})
+        message = response.json().get("message")
+    except:
+        message = "Unknown API error."
+        error = "Unknown API error."
     code = response.status_code
     data = error
 
-    raise codes.get(code, ZTFAPIError)(
+    raise codes.get(code, APIError)(
         message=message, code=code, data=data, response=response
     )
 
 
-class ZTFAPIError(Exception):
+class APIError(Exception):
     response = None
     data = {}
-    message = "An error with the API occurred"
+    message = "An error with the API occurred."
     code = -1
 
     def __init__(self, message=None, code=None, data={}, response=None):
@@ -32,7 +36,7 @@ class ZTFAPIError(Exception):
         return self.message
 
 
-class ParseError(ZTFAPIError):
+class ParseError(APIError):
     pass
 
 
@@ -40,6 +44,6 @@ class FormatValidationError(ParseError):
     pass
 
 
-class ObjectNotFoundError(ZTFAPIError):
+class ObjectNotFoundError(APIError):
     ## TODO add logic for including oid in error message
     pass
