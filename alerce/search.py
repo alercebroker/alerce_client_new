@@ -19,6 +19,8 @@ class AlerceSearch(Client):
                 "lightcurve": "/objects/%s/lightcurve",
                 "magstats": "/objects/%s/magstats",
                 "probabilities": "/objects/%s/probabilities",
+                "features": "/objects/%s/features",
+                "single_feature": "/objects/%s/features/%s",
             },
         }
         default_config.update(kwargs)
@@ -182,5 +184,37 @@ class AlerceSearch(Client):
         """
         q = self._request(
             "GET", self.__get_url("probabilities", oid), result_format=format
+        )
+        return q.result()
+
+    def query_features(self, oid, format="json"):
+        """
+        Gets features of a given object
+
+        Parameters
+        -----------
+        oid : str
+            The object identifier
+        format : str
+            Return format. Can be one of 'pandas' | 'votable' | 'json'
+        """
+        q = self._request("GET", self.__get_url("features", oid), result_format=format)
+        return q.result()
+
+    def query_feature(self, oid, name, format="json"):
+        """
+        Gets a single feature of a specified object id
+
+        Parameters
+        ----------
+        oid : str
+            The object identifier
+        name : str
+            The feature's name
+        format : str
+            Return format. Can be one of 'pandas' | 'votable' | 'json'
+        """
+        q = self._request(
+            "GET", self.__get_url("single_feature", oid, name), result_format=format
         )
         return q.result()

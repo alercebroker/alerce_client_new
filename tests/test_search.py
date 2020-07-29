@@ -102,3 +102,16 @@ def test_query_probabilities(mock_request):
     mock_request.return_value.status_code = 200
     r = alerce.query_probabilities("oid")
     assert r is not None
+
+@patch.object(Session, "request")
+def test_query_features(mock_request):
+    mock_request.return_value.status_code = 200
+    r = alerce.query_features("oid")
+    assert r is not None
+
+@patch.object(Session, "request")
+def test_query_single_feature(mock_request):
+    mock_request.return_value.status_code = 200
+    r = alerce.query_feature(oid="oid", name="feature")
+    assert r is not None
+
