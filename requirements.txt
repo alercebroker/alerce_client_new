@@ -1,4 +1,6 @@
 pandas
 astropy
 requests
+requests_mock
 numpydoc
+IPython

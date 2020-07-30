@@ -2,7 +2,6 @@ from .search import AlerceSearch
 from .crossmatch import AlerceXmatch
 from .stamps import AlerceStamps
 
-
 class Alerce(AlerceSearch, AlerceXmatch, AlerceStamps):
     """
     The main client class that has all the methods for accessing the different services.
@@ -18,7 +17,7 @@ class Alerce(AlerceSearch, AlerceXmatch, AlerceStamps):
         The url of the ZTF API
     """
     def __init__(self, **kwargs):
-       super().__init__(**kwargs) 
+       super().__init__(**kwargs)
 
     def load_config_from_file(self, path):
         pass
