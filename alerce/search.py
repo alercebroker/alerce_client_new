@@ -34,7 +34,15 @@ class AlerceSearch(Client):
     def __get_url(self, resource, *args):
         return self.ztf_url + self.config["ZTF_ROUTES"][resource] % args
 
-    def query_objects(self, format="pandas", **kwargs):
+    def __validate_format(self, format):
+        format = format.lower()
+        if not format in self.allowed_formats:
+            raise FormatValidationError(
+                "Format '%s' not in %s" % (format, self.allowed_formats), code=500
+            )
+        return format
+
+    def query_objects(self, format="pandas", index=None, sort=None, **kwargs):
         """
         Gets a list of objects filtered by specified parameters.
         It is strongly advised to look at the documentation of `ALERCE ZTF API`_
@@ -43,7 +51,11 @@ class AlerceSearch(Client):
         ----------
         format : str
             Return format. Can be one of 'pandas' | 'votable' | 'json'
-
+        index : str
+            Name of the column to use as index when format is 'pandas'
+        sort : str
+            Name of the column to sort when format is 'pandas'
+       
         **kwargs
             Keyword arguments. Each argument can be one of the `ALERCE ZTF API`_
             object query parameters.
@@ -89,7 +101,7 @@ class AlerceSearch(Client):
             result_format=format,
             response_field="items",
         )
-        return q.result()
+        return q.result(index, sort)
 
     def query_object(self, oid, format="json"):
         """
@@ -125,7 +137,7 @@ class AlerceSearch(Client):
         )
         return q.result()
 
-    def query_detections(self, oid, format="json"):
+    def query_detections(self, oid, format="json", index=None, sort=None):
         """
         Gets all detections of a given object
 
@@ -135,13 +147,17 @@ class AlerceSearch(Client):
             The object identifier
         format : str
             Return format. Can be one of 'pandas' | 'votable' | 'json'
+        index : str
+            The name of the column to use as index when format is 'pandas'
+        sort : str
+            The name of the column to sort when format is 'pandas'
         """
         q = self._request(
             "GET", self.__get_url("detections", oid), result_format=format
         )
-        return q.result()
+        return q.result(index, sort)
 
-    def query_non_detections(self, oid, format="json"):
+    def query_non_detections(self, oid, format="json", index=None, sort=None):
         """
         Gets all non detections of a given object
 
@@ -155,9 +171,9 @@ class AlerceSearch(Client):
         q = self._request(
             "GET", self.__get_url("non_detections", oid), result_format=format
         )
-        return q.result()
+        return q.result(index, sort)
 
-    def query_magstats(self, oid, format="json"):
+    def query_magstats(self, oid, format="json", index=None, sort=None):
         """
         Gets magnitude statistics of a given object
 
@@ -169,9 +185,9 @@ class AlerceSearch(Client):
             Return format. Can be one of 'pandas' | 'votable' | 'json'
         """
         q = self._request("GET", self.__get_url("magstats", oid), result_format=format)
-        return q.result()
+        return q.result(index, sort)
 
-    def query_probabilities(self, oid, format="json"):
+    def query_probabilities(self, oid, format="json", index=None, sort=None):
         """
         Gets probabilities of a given object
 
@@ -185,9 +201,9 @@ class AlerceSearch(Client):
         q = self._request(
             "GET", self.__get_url("probabilities", oid), result_format=format
         )
-        return q.result()
+        return q.result(index, sort)
 
-    def query_features(self, oid, format="json"):
+    def query_features(self, oid, format="json", index=None, sort=None):
         """
         Gets features of a given object
 
@@ -199,7 +215,7 @@ class AlerceSearch(Client):
             Return format. Can be one of 'pandas' | 'votable' | 'json'
         """
         q = self._request("GET", self.__get_url("features", oid), result_format=format)
-        return q.result()
+        return q.result(index, sort)
 
     def query_feature(self, oid, name, format="json"):
         """
