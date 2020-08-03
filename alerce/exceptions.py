@@ -35,6 +35,12 @@ class APIError(Exception):
             return str(ret)
         return self.message
 
+class CandidError(Exception):
+    response = None
+    data = {}
+    message = "Object has no stamps."
+    code = -1
+
 
 class ParseError(APIError):
     pass

@@ -4,8 +4,12 @@ from IPython.display import HTML
 from astropy.io.fits import HDUList
 from astropy.io.fits import open as fits_open
 from urllib.error import HTTPError
+from alerce.search import AlerceSearch
+from alerce.exceptions import CandidError
+import math
 
 class AlerceStamps(Client):
+    search_client = AlerceSearch()
     def __init__(self, **kwargs):
         default_config = {
             "AVRO_URL":  "http://avro.alerce.online",
@@ -32,7 +36,16 @@ class AlerceStamps(Client):
         else:  # pragma: no cover
             return True
 
-    def plot_stamp(self, oid, candid):
+    def _get_first_detection(self,oid):
+        detections = self.search_client.query_detections(oid, format="pandas")
+        first_detection = detections[detections.has_stamp].candid.astype(int).min()
+        try:
+            first_detection = int(first_detection)
+        except TypeError:
+            raise CandidError()
+        return first_detection
+
+    def plot_stamp(self, oid, candid = None):
         """Plot stamp in a notebook given oid. It uses IPython HTML.
         Parameters
         ----------
@@ -48,6 +61,9 @@ class AlerceStamps(Client):
         if not self._in_ipynb():
             warnings.warn("This method only works on Notebooks", RuntimeWarning)
             return
+
+        if candid is None:
+            candid = self._get_first_detection(oid)
 
         science = "%s?oid=%s&candid=%s&type=science&format=png" % (
             self.config["AVRO_URL"] + self.config["AVRO_ROUTES"]["get_stamp"], oid, candid)
@@ -69,7 +85,7 @@ class AlerceStamps(Client):
         """ % (oid, candid, science, template , difference)
         display(HTML(images))
 
-    def get_stamps(self, oid, candid):
+    def get_stamps(self, oid, candid = None):
         """Download Stamps for an specific alert.
         Parameters
         ----------
@@ -82,6 +98,8 @@ class AlerceStamps(Client):
         :class:`astropy.io.fits.HDUList`
             Science, Template and Difference stamps for an specific alert.
         """
+        if candid is None:
+            candid = self._get_first_detection(oid)
         try:
             hdulist = HDUList()
             for stamp_type in ["science", "template", "difference"]:
