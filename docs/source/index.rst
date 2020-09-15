@@ -29,11 +29,17 @@ Usage
         format="pandas"
     )
 
+    detections = alerce.query_detections("ObjectID", format="pandas", sort="mjd")
+
+    magstats = alerce.query_magstats("ObjectID")
+
+    
+
 Configuration
 ==============
 By default the `Alerce` object should be ready to use without any external configuration, but in case you need to adjust any parameters then you can configure the Alerce object in different ways.
 
-From object initialization
+At the client object initialization
 -----------------------------
 You can pass parameters to the `Alerce` class constructor to set the parameters for API connection.
 
@@ -77,10 +83,12 @@ Then you can initialize the client like this:
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Contents:
 
    ztf_api
+   xmatch_api
+   stamps_api
 
 
 Indices and tables
