@@ -14,7 +14,15 @@ The ALeRCE client can be installed through pip with
 
 .. code-block:: bash
 
-    pip install alerce
+    pip install git+https://git@github.com/alercebroker/alerce_client_new#egg=alerce_client
+
+Or clone the repository and install from there
+
+.. code-block:: bash
+
+    git clone https://github.com/alercebroker/alerce_client_new.git
+    cd alerce_client_new
+    python setup.py install
 
 Usage
 ===========
