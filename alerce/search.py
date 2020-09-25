@@ -62,7 +62,7 @@ class AlerceSearch(Client):
 
             - classifier : str
                 classifier name
-            - class : str
+            - class_name : str
                 class name
             - ndet : int[]
                 Range of detections.

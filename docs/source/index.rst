@@ -14,7 +14,7 @@ The ALeRCE client can be installed through pip with
 
 .. code-block:: bash
 
-    pip install git+https://git@github.com/alercebroker/alerce_client_new#egg=alerce_client
+    pip install git+https://git@github.com/alercebroker/alerce_client_new#egg=alerce
 
 Or clone the repository and install from there
 
@@ -32,7 +32,7 @@ Usage
     alerce = Alerce()
 
     dataframe = alerce.query_objects(
-        classifier="light curve", 
+        classifier="lc_classifier", 
         class_name="LPV", 
         format="pandas"
     )
