@@ -2,6 +2,7 @@ from pandas import DataFrame
 from astropy.table import Table
 from .exceptions import handle_error, FormatValidationError
 
+
 class Result:
     def __init__(self, json_result, format="json"):
         self.json_result = json_result
@@ -33,6 +34,7 @@ class Result:
         if self.format == "votable":
             return self.to_votable()
 
+
 class Client:
     def __init__(self, **kwargs):
         self.config = {}
@@ -44,7 +46,6 @@ class Client:
 
     def load_config_from_object(self, object):
         self.config.update(object)
-
 
     def _validate_format(self, format):
         format = format.lower()

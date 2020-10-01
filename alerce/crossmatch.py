@@ -4,7 +4,6 @@ from astropy.table import Table, Column
 
 from .utils import Client
 from .exceptions import handle_error
-import logging
 
 
 class AlerceXmatch(Client):

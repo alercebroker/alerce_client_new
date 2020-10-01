@@ -1,5 +1,3 @@
-import json
-
 import requests
 
 from .exceptions import FormatValidationError, ParseError, handle_error
@@ -25,7 +23,6 @@ class AlerceSearch(Client):
         }
         default_config.update(kwargs)
         super().__init__(**default_config)
-        
 
     @property
     def ztf_url(self):

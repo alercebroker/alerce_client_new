@@ -1,12 +1,10 @@
 import warnings
 from .utils import Client
-from IPython.display import HTML
 from astropy.io.fits import HDUList
 from astropy.io.fits import open as fits_open
 from urllib.error import HTTPError
 from alerce.search import AlerceSearch
 from alerce.exceptions import CandidError
-import math
 
 
 class AlerceStamps(Client):
@@ -70,6 +68,7 @@ class AlerceStamps(Client):
         if candid is None:
             candid = self._get_first_detection(oid)
 
+        from IPython.display import HTML
         science = "%s?oid=%s&candid=%s&type=science&format=png" % (
             self.config["AVRO_URL"] + self.config["AVRO_ROUTES"]["get_stamp"],
             oid,

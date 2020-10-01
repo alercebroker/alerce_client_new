@@ -2,6 +2,7 @@ from .search import AlerceSearch
 from .crossmatch import AlerceXmatch
 from .stamps import AlerceStamps
 
+
 class Alerce(AlerceSearch, AlerceXmatch, AlerceStamps):
     """
     The main client class that has all the methods for accessing the different services.

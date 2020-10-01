@@ -1,3 +1,4 @@
+
 def handle_error(response):
     codes = {-1: APIError, 400: ParseError, 404: ObjectNotFoundError}
     try:
@@ -34,6 +35,7 @@ class APIError(Exception):
             ret = {"Error code": self.code, "Message": self.message, "Data": self.data}
             return str(ret)
         return self.message
+
 
 class CandidError(Exception):
     response = None
